@@ -11,12 +11,20 @@ public class Main
         MovieService service = new MovieService(reader);
 
         System.out.println("Movie by ID:");
-        System.out.println(service.getMovieById(139));
+        service.displayMovieDetails(service.getMovieById(18));
+
+
         System.out.println("----------------------------------------");
-        System.out.println("Movies by rating:");
-        System.out.println(service.getByRating(7.5, 8.5));
+        System.out.println("Movies by rating with the format: rating(1.0), rating(2.0)");
+        service.getByRating(7.5, 8.5);
+
         System.out.println("----------------------------------------");
         System.out.println("Movies sorted by release date:");
-        System.out.println(service.getSortedByReleaseDate("1994"));
+        service.getSortedByReleaseDate("1994").forEach(System.out::println);
+
+
+        System.out.println("----------------------------------------");
+        System.out.println("Movie by title with the format: Title-Without-Spaces:");
+        service.displayMovieDetails(service.getMovieByTitle("The-Shawshank-Redemption"));
     }
 }
