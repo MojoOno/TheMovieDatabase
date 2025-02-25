@@ -1,8 +1,6 @@
 package dat.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Data;
 
@@ -11,9 +9,6 @@ import lombok.Data;
 public class GenreDTO
 {
     @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private Long id;
-    @JsonProperty("id")
-    private int genreId;
+    private int id;
     private String name;
 }
