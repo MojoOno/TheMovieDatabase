@@ -30,6 +30,4 @@ public class Actor
     @ToString.Exclude
     @Setter
     private Movie movie;
-
-
 }
