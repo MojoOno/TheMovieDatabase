@@ -2,6 +2,8 @@ package dat.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import dat.dtos.GenreDTO;
+import dat.dtos.GenreResponseDTO;
 import dat.dtos.MovieDTO;
 import dat.dtos.MovieResponseDTO;
 import dat.utils.DataAPIReader;
@@ -21,6 +23,18 @@ public class MovieService {
         this.dataAPIReader = dataAPIReader;
         this.objectMapper = new ObjectMapper();
         this.objectMapper.registerModule(new JavaTimeModule()); // Supports LocalDate
+    }
+
+    public List<GenreDTO> getGenres() {
+        String url = BASE_URL + "/genre/movie/list?language=da&api_key=" + API_KEY;
+        try {
+            String json = dataAPIReader.getDataFromClient(url);
+            GenreResponseDTO response = objectMapper.readValue(json, GenreResponseDTO.class);
+            return response.getGenres();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
     }
 
     public MovieDTO getMovieById(int movieId) {
