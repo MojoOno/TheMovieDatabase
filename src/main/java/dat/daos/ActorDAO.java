@@ -1,11 +1,11 @@
 package dat.daos;
 
 import dat.config.HibernateConfig;
-import dat.entities.Actor;
+import dat.entities.Credit;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
-public class ActorDAO extends GenericDAO<Actor>
+public class ActorDAO extends GenericDAO<Credit>
 {
     private static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
     private static ActorDAO instance;
@@ -15,7 +15,7 @@ public class ActorDAO extends GenericDAO<Actor>
         super(emf);
     }
 
-    public Actor create(Actor object)
+    public Credit create(Credit object)
     {
         try (EntityManager em = emf.createEntityManager())
         {
@@ -26,13 +26,13 @@ public class ActorDAO extends GenericDAO<Actor>
         return object;
     }
 
-    public Actor read(Actor object)
+    public Credit read(Credit object)
     {
         return null;
     }
 
 
-    public Actor update(Actor object)
+    public Credit update(Credit object)
     {
         try (EntityManager em = emf.createEntityManager())
         {
@@ -43,7 +43,7 @@ public class ActorDAO extends GenericDAO<Actor>
         return object;
     }
 
-    public Actor delete(Actor object)
+    public Credit delete(Credit object)
     {
         try (EntityManager em = emf.createEntityManager())
         {
