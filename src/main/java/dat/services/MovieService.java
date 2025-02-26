@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dat.dtos.*;
 import dat.utils.DataAPIReader;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,20 @@ public class MovieService {
             String json = dataAPIReader.getDataFromClient(url);
             GenreResponseDTO response = objectMapper.readValue(json, GenreResponseDTO.class);
             return response.getGenres();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+// https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=da-DK&page=1&release_date.gte=2020-01-01&sort_by=popularity.desc&with_original_language=da
+    public List<MovieDTO> getMoviesFromCountryFromLastFiveYears(String country, LocalDate date) {
+        String url = BASE_URL + "/discover/movie?include_adult=false&include_video=false&language=da-DK&page=1&release_date.gte=TODAY&sort_by=popularity.desc&with_original_language=COUNTRY&api_key=" + API_KEY;
+        try {
+
+            String json = dataAPIReader.getDataFromClient(url.replace("COUNTRY", country).replace("TODAY", date.now().toString()));
+
+            MovieResponseDTO response = objectMapper.readValue(json, MovieResponseDTO.class);
+            return response.getMovies();
         } catch (Exception e) {
             e.printStackTrace();
             return List.of();
