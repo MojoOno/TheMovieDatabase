@@ -22,6 +22,7 @@ public class MovieService {
         this.objectMapper.registerModule(new JavaTimeModule()); // Supports LocalDate
     }
 
+
     public List<GenreDTO> getGenres() {
         String url = BASE_URL + "/genre/movie/list?language=da&api_key=" + API_KEY;
         try {
