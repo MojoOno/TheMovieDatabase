@@ -8,6 +8,6 @@ import java.util.List;
 public class CreditResponseDTO
 {
     private int id;
-    private List<ActorDTO> cast;
-    private List<ActorDTO> crew;
+    private List<CreditDTO> cast;
+    private List<CreditDTO> crew;
 }

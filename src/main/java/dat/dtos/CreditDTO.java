@@ -3,15 +3,19 @@ package dat.dtos;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-
-import java.time.LocalDate;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DirectorDTO
+public class CreditDTO
 {
-    private Long id;
+    private int id;
     private String name;
+
+    @JsonProperty("known_for_department")
     private String knownForDepartment;
 
+
 }
+

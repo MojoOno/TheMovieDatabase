@@ -11,27 +11,31 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MovieService {
+public class MovieService
+{
     private final ObjectMapper objectMapper;
     private final DataAPIReader dataAPIReader;
     private static final String BASE_URL = "https://api.themoviedb.org/3";
     private static final String API_KEY = System.getenv("api_key");
 
 
-    public MovieService(DataAPIReader dataAPIReader) {
+    public MovieService(DataAPIReader dataAPIReader)
+    {
         this.dataAPIReader = dataAPIReader;
         this.objectMapper = new ObjectMapper();
         this.objectMapper.registerModule(new JavaTimeModule()); // Supports LocalDate
     }
 
-
-    public List<GenreDTO> getGenres() {
+    public List<GenreDTO> getGenres()
+    {
         String url = BASE_URL + "/genre/movie/list?language=da&api_key=" + API_KEY;
-        try {
+        try
+        {
             String json = dataAPIReader.getDataFromClient(url);
             GenreResponseDTO response = objectMapper.readValue(json, GenreResponseDTO.class);
             return response.getGenres();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
             return List.of();
         }
@@ -86,7 +90,7 @@ public class MovieService {
     }
 
 
-    public List<ActorDTO> getActors(int movieId) {
+    public List<CreditDTO> getActors(int movieId) {
         String url = BASE_URL + "/movie/" + movieId +"/credits?language=da-DK&api_key=" + API_KEY;
         try {
             String json = dataAPIReader.getDataFromClient(url);
@@ -98,7 +102,7 @@ public class MovieService {
         }
     }
 
-    public List<ActorDTO> getDirectors(int movieId) {
+    public List<CreditDTO> getDirectors(int movieId) {
         String url = BASE_URL + "/movie/" + movieId +"/credits?language=da-DK&api_key=" + API_KEY;
         try {
             String json = dataAPIReader.getDataFromClient(url);
@@ -110,54 +114,66 @@ public class MovieService {
         }
     }
 
-    public MovieDTO getMovieById(int movieId) {
+    public MovieDTO getMovieById(int movieId)
+    {
         String url = BASE_URL + "/movie/" + movieId + "?api_key=" + API_KEY;
-        try {
+        try
+        {
             String json = dataAPIReader.getDataFromClient(url);
             return objectMapper.readValue(json, MovieDTO.class);
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
             return null;
         }
     }
 
-    public List<MovieDTO> getByRating(double minRating, double maxRating) {
+    public List<MovieDTO> getByRating(double minRating, double maxRating)
+    {
         String url = BASE_URL + "/discover/movie?api_key=" + API_KEY + "&vote_average.gte=" + minRating + "&vote_average.lte=" + maxRating;
-        try {
+        try
+        {
             String json = dataAPIReader.getDataFromClient(url);
             MovieResponseDTO response = objectMapper.readValue(json, MovieResponseDTO.class);
             return response.getMovies();
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
             return List.of();
         }
     }
 
-    public List<MovieDTO> getSortedByReleaseDate(String query) {
+    public List<MovieDTO> getSortedByReleaseDate(String query)
+    {
         String url = BASE_URL + "/search/movie?api_key=" + API_KEY + "&query=" + query;
         objectMapper.registerModule(new JavaTimeModule());
-        try {
+        try
+        {
             String json = dataAPIReader.getDataFromClient(url);
             MovieResponseDTO response = objectMapper.readValue(json, MovieResponseDTO.class);
             return response.getMovies().stream()
                     .sorted(Comparator.comparing(MovieDTO::getReleaseDate).reversed())
                     .collect(Collectors.toList());
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
             return List.of();
         }
     }
 
     //I want a method that sorts by description
-    public List<MovieDTO> getSortedByDescription(String query) {
+    public List<MovieDTO> getSortedByDescription(String query)
+    {
         String url = BASE_URL + "/search/movie?api_key=" + API_KEY + "&query=" + query;
-        try {
+        try
+        {
             String json = dataAPIReader.getDataFromClient(url);
             MovieResponseDTO response = objectMapper.readValue(json, MovieResponseDTO.class);
             return response.getMovies().stream()
                     .sorted(Comparator.comparing(MovieDTO::getDescription))
                     .collect(Collectors.toList());
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             e.printStackTrace();
             return List.of();
         }
