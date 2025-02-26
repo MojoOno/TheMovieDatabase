@@ -26,22 +26,6 @@ public class MovieService {
     }
 
 
-    public int getDetails(int movieId)
-    {
-
-        String url = BASE_URL + "/movie/" + movieId + "/credits?language=en-US";
-        try
-        {
-            String json = dataAPIReader.getDataFromClient(url);
-            System.out.println(json);
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return movieId;
-    }
-
-
     public List<GenreDTO> getGenres() {
         String url = BASE_URL + "/genre/movie/list?language=da&api_key=" + API_KEY;
         try {
