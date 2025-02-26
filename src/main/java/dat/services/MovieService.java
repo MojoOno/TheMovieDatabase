@@ -2,10 +2,7 @@ package dat.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import dat.dtos.GenreDTO;
-import dat.dtos.GenreResponseDTO;
-import dat.dtos.MovieDTO;
-import dat.dtos.MovieResponseDTO;
+import dat.dtos.*;
 import dat.utils.DataAPIReader;
 
 import java.util.Comparator;
@@ -31,6 +28,30 @@ public class MovieService {
             String json = dataAPIReader.getDataFromClient(url);
             GenreResponseDTO response = objectMapper.readValue(json, GenreResponseDTO.class);
             return response.getGenres();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+
+    public List<ActorDTO> getActors(int movieId) {
+        String url = BASE_URL + "/movie/" + movieId +"/credits?language=da-DK&api_key=" + API_KEY;
+        try {
+            String json = dataAPIReader.getDataFromClient(url);
+            CreditResponseDTO response = objectMapper.readValue(json, CreditResponseDTO.class);
+            return response.getCast();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+
+    public List<ActorDTO> getDirectors(int movieId) {
+        String url = BASE_URL + "/movie/" + movieId +"/credits?language=da-DK&api_key=" + API_KEY;
+        try {
+            String json = dataAPIReader.getDataFromClient(url);
+            CreditResponseDTO response = objectMapper.readValue(json, CreditResponseDTO.class);
+            return response.getCrew().stream().filter(actor -> actor.getKnownForDepartment().equals("Directing")).collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();
             return List.of();
