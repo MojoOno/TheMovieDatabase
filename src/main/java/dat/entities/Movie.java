@@ -1,17 +1,15 @@
 package dat.entities;
 
-import dat.entities.Actor;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -19,17 +17,29 @@ import java.util.List;
 public class Movie
 {
     @Id
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @Column(name = "release_date")
+    private LocalDate releaseDate;
+    private double rating;
+    private double popularity;
 
-    @OneToMany
-    private List<Actor>actorList;
+    @EqualsAndHashCode.Exclude
+    @OneToMany (mappedBy = "movie", fetch = FetchType.EAGER)
+    private Set<Credit> credits = new HashSet<>();
 
-    @OneToMany
-    private List<Director>directorList;
+    @EqualsAndHashCode.Exclude
+    @ManyToMany (mappedBy = "movies", fetch = FetchType.EAGER)
+    private Set<Genre> genres = new HashSet<>();
 
-    @ManyToMany
-    private List<Genre>genreList;
-
+    public void addCredit(Credit credit)
+    {
+        if (credit != null)
+        {
+            credits.add(credit);
+            credit.setMovie(this);
+        }
+    }
 
 }
