@@ -108,37 +108,5 @@ public class MovieService
         }
     }
 
-    public void fetchAllDataFromTmdb()
-    {
-        {
-            List<MovieDTO> allMovies = new ArrayList();
-
-            MovieResponseDTO respons = null;
-            int currentPage = 1;
-            do
-            {
-                respons = getMovies(currentPage);
-                allMovies.addAll(respons.getMovies());
-                currentPage++;
-            }
-            while (respons.getTotalPages() > currentPage);
-
-// loop gennem listen og persist hver movie og tilføj den persistede movie til en queue (en kø)
-            Queue<Movie> movieQueue = new Queue();
-            for (MovieDTO movie : allMovies)
-                Movie persistedMovie = MovieDTO.create(movie);
-            movieQueue.push(persistedMovie);
-        }
-
-// hvis der er noget i køen så hent detaljer om cast (actor og director) og opdater entiteten
-        while (movieQueue.notEmpty())
-
-        {
-            Movie currentMovie = movieQueue.pop();
-            List<ActorDTO> actorsDto = getActors(currentMovie.getId());
-            List<Actor> actors = ActorDao.create(actorsDto);
-            currentMovie.addActors(actors);
-            MovieDao.update(currentMovie);
-        }
-    }
+   
 }
