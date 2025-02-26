@@ -5,14 +5,23 @@ import dat.entities.Credit;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
-public class ActorDAO extends GenericDAO<Credit>
+public class CreditDAO implements IDAO<Credit>
 {
-    private static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-    private static ActorDAO instance;
+    private static EntityManagerFactory emf;
+    private static CreditDAO instance;
 
-    private ActorDAO(EntityManagerFactory emf)
+    private CreditDAO(EntityManagerFactory emf)
     {
-        super(emf);
+        this.emf = emf;
+    }
+
+    public static CreditDAO getInstance(EntityManagerFactory emf)
+    {
+        if (instance == null)
+        {
+            instance = new CreditDAO(emf);
+        }
+        return instance;
     }
 
     public Credit create(Credit object)
@@ -26,7 +35,7 @@ public class ActorDAO extends GenericDAO<Credit>
         return object;
     }
 
-    public Credit read(Credit object)
+    public Credit read(int id)
     {
         return null;
     }
@@ -43,23 +52,13 @@ public class ActorDAO extends GenericDAO<Credit>
         return object;
     }
 
-    public Credit delete(Credit object)
+    public void delete(Long id)
     {
         try (EntityManager em = emf.createEntityManager())
         {
             em.getTransaction().begin();
-            em.remove(object);
+            em.remove(id);
             em.getTransaction().commit();
         }
-        return object;
-    }
-
-    public ActorDAO getInstance(EntityManagerFactory emf)
-    {
-        if (instance == null)
-        {
-            instance = new ActorDAO(emf);
-        }
-        return instance;
     }
 }
