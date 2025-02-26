@@ -1,6 +1,5 @@
 package dat.entities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import dat.dtos.GenreDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
