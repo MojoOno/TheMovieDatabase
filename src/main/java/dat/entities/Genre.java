@@ -7,10 +7,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -22,8 +25,10 @@ public class Genre
     private Long id;
     private int genreId;
     private String name;
-    @ManyToMany(mappedBy = "movies")
-    private List<Movie> movies; //skal måske være et Set? Så vi ikke har den samme film to gange i listen
+
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "genres", fetch = jakarta.persistence.FetchType.EAGER)
+    private Set<Movie> movies = new HashSet<>();
 
     public Genre(GenreDTO genreDTO)
     {
@@ -36,7 +41,7 @@ public class Genre
         if (movie != null)
         {
             movies.add(movie);
-            //movie.addGenre(this);
+            movie.getGenres().add(this);
         }
     }
 }
