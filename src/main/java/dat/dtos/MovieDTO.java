@@ -20,7 +20,7 @@ public class MovieDTO
         @JsonProperty("vote_average")
         private Double score;
         @JsonProperty("original_language")
-        private String langueage;
+        private String language;
 
 
 //    public static class MovieGenres
