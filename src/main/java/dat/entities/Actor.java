@@ -18,14 +18,14 @@ public class Actor
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String originalName;
-    private int gender;
+//    private String originalName;
+//    private int gender;
     private String knownForDepartment;
-    private double popularity;
-    private String profilePath;
-    private int castId;
-    private String character;
-    private String creditId;
+//    private double popularity;
+//    private String profilePath;
+//    private int castId;
+//    private String character;
+//    private String creditId;
 
     @ManyToOne
     @ToString.Exclude
@@ -35,13 +35,13 @@ public class Actor
     public Actor(ActorDTO actorDTO)
     {
         this.name = actorDTO.getName();
-        this.originalName = actorDTO.getOriginalName();
-        this.gender = actorDTO.getGender();
+//        this.originalName = actorDTO.getOriginalName();
+//        this.gender = actorDTO.getGender();
         this.knownForDepartment = actorDTO.getKnownForDepartment();
-        this.popularity = actorDTO.getPopularity();
-        this.profilePath = actorDTO.getProfilePath();
-        this.castId = actorDTO.getCastId();
-        this.character = actorDTO.getCharacter();
-        this.creditId = actorDTO.getCreditId();
+//        this.popularity = actorDTO.getPopularity();
+//        this.profilePath = actorDTO.getProfilePath();
+//        this.castId = actorDTO.getCastId();
+//        this.character = actorDTO.getCharacter();
+//        this.creditId = actorDTO.getCreditId();
     }
 }
