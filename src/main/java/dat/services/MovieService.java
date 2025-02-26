@@ -3,16 +3,12 @@ package dat.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dat.dtos.*;
-import dat.dtos.*;
-import dat.entities.Actor;
-import dat.entities.Movie;
 import dat.utils.DataAPIReader;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Queue;
 import java.util.stream.Collectors;
 
 public class MovieService
@@ -94,7 +90,7 @@ public class MovieService
     }
 
 
-    public List<ActorDTO> getActors(int movieId) {
+    public List<CreditDTO> getActors(int movieId) {
         String url = BASE_URL + "/movie/" + movieId +"/credits?language=da-DK&api_key=" + API_KEY;
         try {
             String json = dataAPIReader.getDataFromClient(url);
@@ -106,7 +102,7 @@ public class MovieService
         }
     }
 
-    public List<ActorDTO> getDirectors(int movieId) {
+    public List<CreditDTO> getDirectors(int movieId) {
         String url = BASE_URL + "/movie/" + movieId +"/credits?language=da-DK&api_key=" + API_KEY;
         try {
             String json = dataAPIReader.getDataFromClient(url);
