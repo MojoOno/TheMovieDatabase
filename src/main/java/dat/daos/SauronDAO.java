@@ -4,6 +4,7 @@ import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SauronDAO
@@ -90,6 +91,25 @@ public class SauronDAO
             T updatedEntity = em.merge(object);
             em.getTransaction().commit();
             return updatedEntity;
+        }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error updating object. ", e);
+        }
+    }
+
+    public <T> List<T> update(List<T> objects)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
+            List<T> updatedObjects = new ArrayList<>();
+            em.getTransaction().begin();
+            for (T object : objects)
+            {
+                updatedObjects.add(em.merge(object));
+            }
+            em.getTransaction().commit();
+            return updatedObjects;
         }
         catch (Exception e)
         {

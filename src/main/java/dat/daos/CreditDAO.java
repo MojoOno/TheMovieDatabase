@@ -91,14 +91,14 @@ public class CreditDAO implements IDAO<Credit>
         try (EntityManager em = emf.createEntityManager())
         {
             em.getTransaction().begin();
-            em.merge(object);
+            Credit updatedEntity = em.merge(object);
             em.getTransaction().commit();
+            return updatedEntity;
         }
         catch (Exception e)
         {
             throw new ApiException(401, "Error updating credit from db", e);
         }
-        return object;
     }
 
     public void delete(Long id)

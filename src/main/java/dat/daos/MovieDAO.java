@@ -83,13 +83,13 @@ public class MovieDAO implements IDAO<Movie>
         try (EntityManager em = emf.createEntityManager())
         {
             em.getTransaction().begin();
-            em.merge(object);
+            Movie updatedEntity = em.merge(object);
             em.getTransaction().commit();
+            return updatedEntity;
         } catch (Exception e)
         {
             throw new ApiException(401, "Error updating movie. ", e);
         }
-        return object;
     }
     @Override
     public void delete(Long id)

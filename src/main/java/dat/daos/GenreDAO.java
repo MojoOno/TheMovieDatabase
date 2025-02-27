@@ -77,14 +77,14 @@ public class GenreDAO implements IDAO<Genre>
         try (EntityManager em = emf.createEntityManager())
         {
             em.getTransaction().begin();
-            em.merge(object);
+            Genre updatedEntity = em.merge(object);
             em.getTransaction().commit();
+            return updatedEntity;
         }
         catch (Exception e)
         {
             throw new ApiException(401, "Error updating genre", e);
         }
-        return object;
     }
 
     public void delete(Long id)
