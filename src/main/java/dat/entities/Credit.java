@@ -19,7 +19,7 @@ public class Credit
     private String name;
     private String knownForDepartment;
 
-    @ManyToMany (mappedBy = "credits", fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @ToString.Exclude
     private Set<Movie> movies = new HashSet<>();
 

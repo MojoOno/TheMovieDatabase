@@ -15,7 +15,6 @@ import dat.utils.DataAPIReader;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Main
 {
@@ -60,7 +59,7 @@ public class Main
                     .map(Credit::new)
                     .toList();
             creditDAO.update(cast);
-            cast.forEach(movie::addCredit);
+            cast.forEach(movie::addActor);
             movieDAO.update(movie);
 
             // Add directors to the movie
@@ -69,7 +68,7 @@ public class Main
                     .map(Credit::new)
                     .toList();
             creditDAO.update(directors);
-            directors.forEach(movie::addCredit);
+            directors.forEach(movie::addDirector);
             movieDAO.update(movie);
         }
         //create a new Credit object for each movie in the list
