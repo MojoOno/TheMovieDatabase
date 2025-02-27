@@ -21,6 +21,7 @@ public class Movie
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String description;
     @Column(name = "release_date")
     private LocalDate releaseDate;
@@ -28,7 +29,7 @@ public class Movie
     private double popularity;
 
     @EqualsAndHashCode.Exclude
-    @ManyToMany (fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Genre> genres = new HashSet<>();
 
     public Movie(MovieDTO movieDTO)
@@ -38,6 +39,15 @@ public class Movie
         this.releaseDate = movieDTO.getReleaseDate();
         this.rating = movieDTO.getScore();
         this.popularity = movieDTO.getPopularity();
+    }
+
+    public void addGenre(Genre genre)
+    {
+        if (genre != null)
+        {
+            genres.add(genre);
+            genre.addMovie(this);
+        }
     }
 //    @EqualsAndHashCode.Exclude
 //    @OneToMany (mappedBy = "movie", fetch = FetchType.EAGER)
