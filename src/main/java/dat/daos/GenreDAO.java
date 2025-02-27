@@ -33,8 +33,11 @@ public class GenreDAO implements IDAO<Genre>
             em.getTransaction().begin();
             em.persist(object);
             em.getTransaction().commit();
+            return object;
+        } catch (Exception e)
+        {
+            throw new ApiException(401, "Error creating movie");
         }
-        return object;
     }
 
     public List<Genre> create(List<Genre> objects)
