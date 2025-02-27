@@ -6,6 +6,7 @@ import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
+import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.List;
 
@@ -39,9 +40,12 @@ public class MovieDAO implements IDAO<Movie>
             em.persist(object);
             em.getTransaction().commit();
             return object;
+        } catch (ConstraintViolationException e)
+        {
+            throw new ApiException(403, "Error movie violates constraint, likely already exists.", e);
         } catch (Exception e)
         {
-            throw new ApiException(401, "Error creating movie");
+            throw new ApiException(401, "Error creating movie. ", e);
         }
     }
     public List<Movie> create(List<Movie> objects)
@@ -54,6 +58,9 @@ public class MovieDAO implements IDAO<Movie>
                 em.persist(object);
             }
             em.getTransaction().commit();
+        } catch (Exception e)
+        {
+            throw new ApiException(401, "Error creating movies. ", e);
         }
         return objects;
     }
@@ -71,6 +78,9 @@ public class MovieDAO implements IDAO<Movie>
             em.getTransaction().begin();
             em.merge(object);
             em.getTransaction().commit();
+        } catch (Exception e)
+        {
+            throw new ApiException(401, "Error updating movie. ", e);
         }
         return object;
     }
@@ -82,6 +92,9 @@ public class MovieDAO implements IDAO<Movie>
             em.getTransaction().begin();
             em.remove(id);
             em.getTransaction().commit();
+        } catch (Exception e)
+        {
+            throw new ApiException(401, "Error deleting movie. ", e);
         }
     }
 
@@ -96,9 +109,9 @@ public class MovieDAO implements IDAO<Movie>
             movies = query.getResultList();
             em.getTransaction().commit();
 
-        } catch (Exception e)
+        }  catch (Exception e)
         {
-            e.printStackTrace();
+            throw new ApiException(401, "Error reading movie. ", e);
         }
         return movies;
     }
