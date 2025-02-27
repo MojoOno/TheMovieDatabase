@@ -67,7 +67,14 @@ public class MovieDAO implements IDAO<Movie>
     @Override
     public Movie read(int id)
     {
-        return null;
+        try (EntityManager em = emf.createEntityManager())
+        {
+            return em.find(Movie.class, id);
+        }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error reading movie from db", e);
+        }
     }
 
     @Override
