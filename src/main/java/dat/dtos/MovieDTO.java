@@ -6,6 +6,7 @@ import dat.enums.MovieGenres;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -21,6 +22,8 @@ public class MovieDTO
         @JsonProperty("vote_average")
         private Double score;
         private Double popularity;
+        @JsonProperty("genre_ids")
+        private List<Integer> genreIds;
 
 
 }

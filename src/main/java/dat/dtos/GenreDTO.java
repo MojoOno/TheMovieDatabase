@@ -8,6 +8,6 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GenreDTO
 {
-    private int id;
+    private Long id;
     private String name;
 }
