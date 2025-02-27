@@ -27,6 +27,10 @@ public class Movie
     private double rating;
     private double popularity;
 
+    @EqualsAndHashCode.Exclude
+    @ManyToMany (fetch = FetchType.EAGER)
+    private Set<Genre> genres = new HashSet<>();
+
     public Movie(MovieDTO movieDTO)
     {
         this.title = movieDTO.getTitle();
@@ -35,14 +39,10 @@ public class Movie
         this.rating = movieDTO.getScore();
         this.popularity = movieDTO.getPopularity();
     }
-
 //    @EqualsAndHashCode.Exclude
 //    @OneToMany (mappedBy = "movie", fetch = FetchType.EAGER)
 //    private Set<Credit> credits = new HashSet<>();
 //
-//    @EqualsAndHashCode.Exclude
-//    @ManyToMany (mappedBy = "movies", fetch = FetchType.EAGER)
-//    private Set<Genre> genres = new HashSet<>();
 //
 //    public void addCredit(Credit credit)
 //    {
