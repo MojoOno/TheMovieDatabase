@@ -5,6 +5,8 @@ import dat.entities.Genre;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.List;
+
 public class GenreDAO implements IDAO<Genre>
 {
     private static EntityManagerFactory emf;
@@ -32,6 +34,20 @@ public class GenreDAO implements IDAO<Genre>
             em.getTransaction().commit();
         }
         return object;
+    }
+
+    public List<Genre> create(List<Genre> objects)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
+            em.getTransaction().begin();
+            for (Genre object : objects)
+            {
+                em.persist(object);
+            }
+            em.getTransaction().commit();
+        }
+        return objects;
     }
 
     public Genre read(int id)
