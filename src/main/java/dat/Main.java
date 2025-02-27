@@ -27,7 +27,11 @@ public class Main
 
         List<MovieDTO> movieDTOs = service.getMoviesFromCountryFromLastFiveYears("da");
 
-        Movie movie = new Movie(movieDTOs.get(0));
-        movieDAO.create(movie);
+        //create a new movie object for each movie in the list
+        for (MovieDTO movieDTO : movieDTOs)
+        {
+            Movie movie = new Movie(movieDTO);
+            movieDAO.create(movie);
+        }
     }
 }

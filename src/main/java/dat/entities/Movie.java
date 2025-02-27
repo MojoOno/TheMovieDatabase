@@ -29,7 +29,6 @@ public class Movie
 
     public Movie(MovieDTO movieDTO)
     {
-        this.id = movieDTO.getId();
         this.title = movieDTO.getTitle();
         this.description = movieDTO.getDescription();
         this.releaseDate = movieDTO.getReleaseDate();

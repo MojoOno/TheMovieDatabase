@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDTO
 {
-        private Long id;
+
         @JsonProperty("original_title")
         private String title;
         @JsonProperty("overview")
