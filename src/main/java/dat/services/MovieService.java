@@ -4,10 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dat.config.HibernateConfig;
 import dat.daos.GenreDAO;
+import dat.daos.MovieDAO;
 import dat.dtos.*;
 import dat.entities.Genre;
+import dat.entities.Movie;
 import dat.utils.DataAPIReader;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,6 +27,7 @@ public class MovieService
     private static final String API_KEY = System.getenv("api_key");
     private final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
     private final GenreDAO genreDAO = GenreDAO.getInstance(emf);
+    private final MovieDAO movieDAO = MovieDAO.getInstance(emf);
 
 
     public MovieService(DataAPIReader dataAPIReader)
@@ -30,6 +35,24 @@ public class MovieService
         this.dataAPIReader = dataAPIReader;
         this.objectMapper = new ObjectMapper();
         this.objectMapper.registerModule(new JavaTimeModule()); // Supports LocalDate
+    }
+
+    public List<Movie> readMoviesByGenre(String genreName)
+    {
+        List<Movie> movies = null;
+        try {
+            movies = movieDAO.findAll();
+            List<Movie> filteredMovies = movies.stream()
+                .filter(movie -> movie.getGenres().stream()
+                    .anyMatch(genre -> genre.getName().equalsIgnoreCase(genreName)))
+                .collect(Collectors.toList());
+
+            filteredMovies.forEach(System.out::println);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return movies; // Return the filtered list
     }
 
     public List<Genre> readAllGenres()
