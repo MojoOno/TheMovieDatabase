@@ -1,8 +1,6 @@
 package dat.daos;
 
-import dat.config.HibernateConfig;
 import dat.entities.Credit;
-import dat.entities.Genre;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -61,7 +59,7 @@ public class CreditDAO implements IDAO<Credit>
         return objects;
     }
 
-    public Credit read(int id)
+    public Credit read(Long id)
     {
         try (EntityManager em = emf.createEntityManager())
         {

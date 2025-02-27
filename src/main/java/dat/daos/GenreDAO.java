@@ -1,6 +1,5 @@
 package dat.daos;
 
-import dat.config.HibernateConfig;
 import dat.entities.Genre;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
@@ -59,7 +58,7 @@ public class GenreDAO implements IDAO<Genre>
         return objects;
     }
 
-    public Genre read(int id)
+    public Genre read(Long id)
     {
         try (EntityManager em = emf.createEntityManager())
         {

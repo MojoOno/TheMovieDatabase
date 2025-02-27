@@ -1,14 +1,11 @@
 package dat.daos;
 
-import dat.entities.Genre;
 import dat.entities.Movie;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
 import org.hibernate.exception.ConstraintViolationException;
-
-import java.util.List;
 
 import java.util.List;
 
@@ -65,7 +62,7 @@ public class MovieDAO implements IDAO<Movie>
         return objects;
     }
     @Override
-    public Movie read(int id)
+    public Movie read(Long id)
     {
         try (EntityManager em = emf.createEntityManager())
         {

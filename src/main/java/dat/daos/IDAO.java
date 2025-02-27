@@ -24,7 +24,7 @@ public interface IDAO<T>
             }
         }
     }
-    T read(int id);
+    T read(Long id);
     default T update(T object)
     {
         try (EntityManager em = emf.createEntityManager())
