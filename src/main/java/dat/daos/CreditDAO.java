@@ -1,8 +1,6 @@
 package dat.daos;
 
-import dat.config.HibernateConfig;
 import dat.entities.Credit;
-import dat.entities.Genre;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
