@@ -2,8 +2,12 @@ package dat.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import dat.config.HibernateConfig;
+import dat.daos.GenreDAO;
 import dat.dtos.*;
+import dat.entities.Genre;
 import dat.utils.DataAPIReader;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,6 +21,8 @@ public class MovieService
     private final DataAPIReader dataAPIReader;
     private static final String BASE_URL = "https://api.themoviedb.org/3";
     private static final String API_KEY = System.getenv("api_key");
+    private final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+    private final GenreDAO genreDAO = GenreDAO.getInstance(emf);
 
 
     public MovieService(DataAPIReader dataAPIReader)
@@ -24,6 +30,25 @@ public class MovieService
         this.dataAPIReader = dataAPIReader;
         this.objectMapper = new ObjectMapper();
         this.objectMapper.registerModule(new JavaTimeModule()); // Supports LocalDate
+    }
+
+    public List<Genre> readAllGenres()
+    {
+        List<Genre> genres = null;
+        try
+        {
+            genres = genreDAO.readAll();
+            genres.stream()
+                    .forEach(System.out::println);
+
+            System.out.println("First genre: " + genres.get(0));
+            int last = genres.size() - 1;
+            System.out.println("Last genre: " +genres.get(last));
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return genres;
     }
 
     public List<GenreDTO> getGenres()
