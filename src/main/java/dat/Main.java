@@ -41,6 +41,9 @@ public class Main
         for (MovieDTO movieDTO : movieDTOs)
         {
             Movie movie = new Movie(movieDTO);
+            movieDTO.getGenreIds().forEach(id -> {
+                movie.addGenre(genreDAO.read(id));
+            });
             movieDAO.create(movie);
         }
     }
