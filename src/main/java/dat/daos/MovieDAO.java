@@ -4,6 +4,9 @@ import dat.entities.Movie;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
+
+import java.util.List;
 
 public class MovieDAO implements IDAO<Movie>
 {
@@ -38,6 +41,7 @@ public class MovieDAO implements IDAO<Movie>
             throw new ApiException(401, "Error creating movie");
         }
     }
+
     @Override
     public Movie read(int id)
     {
@@ -64,6 +68,23 @@ public class MovieDAO implements IDAO<Movie>
             em.remove(id);
             em.getTransaction().commit();
         }
+    }
 
+    public List<Movie> findAll()
+    {
+        List<Movie> movies = null;
+        try (EntityManager em = emf.createEntityManager())
+        {
+            em.getTransaction().begin();
+            String jpql = "SELECT m FROM Movie m ";
+            Query query = em.createQuery(jpql);
+            movies = query.getResultList();
+            em.getTransaction().commit();
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return movies;
     }
 }
