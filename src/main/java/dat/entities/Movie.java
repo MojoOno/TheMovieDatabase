@@ -18,7 +18,6 @@ import java.util.Set;
 public class Movie
 {
     @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
     private String title;
     @Column(columnDefinition = "TEXT")
@@ -32,6 +31,10 @@ public class Movie
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Genre> genres = new HashSet<>();
 
+    @EqualsAndHashCode.Exclude
+    @ManyToMany (fetch = FetchType.EAGER)
+    private Set<Credit> credits = new HashSet<>();
+
     public Movie(MovieDTO movieDTO)
     {
         this.title = movieDTO.getTitle();
@@ -40,7 +43,6 @@ public class Movie
         this.rating = movieDTO.getScore();
         this.popularity = movieDTO.getPopularity();
     }
-
     public void addGenre(Genre genre)
     {
         if (genre != null)
@@ -49,18 +51,14 @@ public class Movie
             genre.addMovie(this);
         }
     }
-//    @EqualsAndHashCode.Exclude
-//    @OneToMany (mappedBy = "movie", fetch = FetchType.EAGER)
-//    private Set<Credit> credits = new HashSet<>();
-//
-//
-//    public void addCredit(Credit credit)
-//    {
-//        if (credit != null)
-//        {
-//            credits.add(credit);
-//            credit.setMovie(this);
-//        }
-//    }
+
+    public void addCredit(Credit credit)
+    {
+        if (credit != null)
+        {
+            credits.add(credit);
+            credit.addMovie(this);
+        }
+    }
 
 }
