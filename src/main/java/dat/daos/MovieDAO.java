@@ -1,9 +1,12 @@
 package dat.daos;
 
+import dat.entities.Genre;
 import dat.entities.Movie;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+
+import java.util.List;
 
 public class MovieDAO implements IDAO<Movie>
 {
@@ -37,6 +40,19 @@ public class MovieDAO implements IDAO<Movie>
         {
             throw new ApiException(401, "Error creating movie");
         }
+    }
+    public List<Movie> create(List<Movie> objects)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
+            em.getTransaction().begin();
+            for (Movie object : objects)
+            {
+                em.persist(object);
+            }
+            em.getTransaction().commit();
+        }
+        return objects;
     }
     @Override
     public Movie read(int id)
