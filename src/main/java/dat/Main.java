@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class Main
 {
-    final static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+    public final static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
     final static MovieDAO movieDAO = MovieDAO.getInstance(emf);
     final static CreditDAO creditDAO = CreditDAO.getInstance(emf);
     final static GenreDAO genreDAO = GenreDAO.getInstance(emf);
