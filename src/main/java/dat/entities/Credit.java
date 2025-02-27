@@ -25,6 +25,7 @@ public class Credit
 
     public Credit(CreditDTO creditDTO)
     {
+        this.id = creditDTO.getCreditId();
         this.name = creditDTO.getName();
         this.knownForDepartment = creditDTO.getKnownForDepartment();
     }
