@@ -20,14 +20,14 @@ public class Credit
     private String name;
     private String knownForDepartment;
 
-    @ManyToOne
-    @ToString.Exclude
-    @Setter
-    private Movie movie;
-
-    public Credit(CreditDTO creditDTO)
-    {
-        this.name = creditDTO.getName();
-        this.knownForDepartment = creditDTO.getKnownForDepartment();
-    }
+//    @ManyToOne
+//    @ToString.Exclude
+//    @Setter
+//    private Movie movie;
+//
+//    public Credit(CreditDTO creditDTO)
+//    {
+//        this.name = creditDTO.getName();
+//        this.knownForDepartment = creditDTO.getKnownForDepartment();
+//    }
 }

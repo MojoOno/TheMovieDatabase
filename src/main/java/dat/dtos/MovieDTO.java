@@ -11,15 +11,16 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDTO
 {
+        private Long id;
         @JsonProperty("original_title")
         private String title;
         @JsonProperty("overview")
         private String description;
-        private Long id;
         @JsonProperty("release_date")
         private LocalDate releaseDate;
         @JsonProperty("vote_average")
         private Double score;
+        private Double popularity;
 
 
 }

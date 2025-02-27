@@ -5,15 +5,24 @@ import dat.entities.Genre;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
-public class GenreDAO extends GenericDAO<Genre>
+public class GenreDAO implements IDAO<Genre>
 {
-    private static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+    private static EntityManagerFactory emf;
     private static GenreDAO instance;
 
     private GenreDAO(EntityManagerFactory emf)
     {
-        super(emf);
+        this.emf = emf;
     }
+    public static GenreDAO getInstance(EntityManagerFactory emf)
+    {
+        if (instance == null)
+        {
+            instance = new GenreDAO(emf);
+        }
+        return instance;
+    }
+
     public Genre create(Genre object)
     {
         try (EntityManager em = emf.createEntityManager())
@@ -25,7 +34,7 @@ public class GenreDAO extends GenericDAO<Genre>
         return object;
     }
 
-    public Genre read(Genre object)
+    public Genre read(int id)
     {
         return null;
     }
@@ -42,23 +51,13 @@ public class GenreDAO extends GenericDAO<Genre>
         return object;
     }
 
-    public Genre delete(Genre object)
+    public void delete(Long id)
     {
         try (EntityManager em = emf.createEntityManager())
         {
             em.getTransaction().begin();
-            em.remove(object);
+            em.remove(id);
             em.getTransaction().commit();
         }
-        return object;
-    }
-
-    public GenreDAO getInstance(EntityManagerFactory emf)
-    {
-        if (instance == null)
-        {
-            instance = new GenreDAO(emf);
-        }
-        return instance;
     }
 }

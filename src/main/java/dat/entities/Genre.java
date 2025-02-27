@@ -26,22 +26,22 @@ public class Genre
     private int genreId;
     private String name;
 
-    @EqualsAndHashCode.Exclude
-    @ManyToMany(mappedBy = "genres", fetch = jakarta.persistence.FetchType.EAGER)
-    private Set<Movie> movies = new HashSet<>();
-
-    public Genre(GenreDTO genreDTO)
-    {
-        this.genreId = genreDTO.getId();
-        this.name = genreDTO.getName();
-    }
-
-    public void addMovie(Movie movie)
-    {
-        if (movie != null)
-        {
-            movies.add(movie);
-            movie.getGenres().add(this);
-        }
-    }
+//    @EqualsAndHashCode.Exclude
+//    @ManyToMany(mappedBy = "genres", fetch = jakarta.persistence.FetchType.EAGER)
+//    private Set<Movie> movies = new HashSet<>();
+//
+//    public Genre(GenreDTO genreDTO)
+//    {
+//        this.genreId = genreDTO.getId();
+//        this.name = genreDTO.getName();
+//    }
+//
+//    public void addMovie(Movie movie)
+//    {
+//        if (movie != null)
+//        {
+//            movies.add(movie);
+//            movie.getGenres().add(this);
+//        }
+//    }
 }
