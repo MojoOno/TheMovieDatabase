@@ -2,6 +2,7 @@ package dat.daos;
 
 import dat.config.HibernateConfig;
 import dat.entities.Genre;
+import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -52,7 +53,14 @@ public class GenreDAO implements IDAO<Genre>
 
     public Genre read(int id)
     {
-        return null;
+        try (EntityManager em = emf.createEntityManager())
+        {
+            return em.find(Genre.class, id);
+        }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error reading genre from db", e);
+        }
     }
 
 
