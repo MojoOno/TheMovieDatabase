@@ -32,6 +32,11 @@ public class Genre
         this.name = genreDTO.getName();
     }
 
+    public Genre(String name)
+    {
+        this.name = name;
+    }
+
     public void addMovie(Movie movie)
     {
         if (movie != null)

@@ -39,6 +39,7 @@ public class MovieService
         {
             genres = genreDAO.readAll();
             genres.stream()
+                .map(genre -> new Genre(genre.getName()))
                     .forEach(System.out::println);
 
             System.out.println("First genre: " + genres.get(0));
