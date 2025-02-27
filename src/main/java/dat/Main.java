@@ -48,7 +48,7 @@ public class Main
 
             // Add genres to the movie
             movieDTO.getGenreIds().forEach(id -> movie.addGenre(genreDAO.read(id)));
-            movieDAO.update(movie);
+            //movieDAO.update(movie);
 
 
             // Add cast to the movie
@@ -61,13 +61,13 @@ public class Main
             movieDAO.update(movie);
 
             // Add directors to the movie
-            List<CreditDTO> directorList = service.getCrew(movieDTO.getMovieId());
-            List<Credit> directors = directorList.stream()
-                    .map(Credit::new)
-                    .toList();
-            creditDAO.update(directors);
-            directors.forEach(movie::addDirector);
-            movieDAO.update(movie);
+//            List<CreditDTO> directorList = service.getCrew(movieDTO.getMovieId());
+//            List<Credit> directors = directorList.stream()
+//                    .map(Credit::new)
+//                    .toList();
+//            creditDAO.update(directors);
+//            directors.forEach(movie::addDirector);
+//            movieDAO.update(movie);
         }
         //create a new Credit object for each movie in the list
 

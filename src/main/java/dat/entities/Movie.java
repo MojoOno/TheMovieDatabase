@@ -35,9 +35,9 @@ public class Movie
     @ManyToMany (fetch = FetchType.EAGER)
     private Set<Credit> actors = new HashSet<>();
 
-    @EqualsAndHashCode.Exclude
-    @ManyToMany (fetch = FetchType.EAGER)
-    private Set<Credit> directors = new HashSet<>();
+//    @EqualsAndHashCode.Exclude
+//    @ManyToMany (fetch = FetchType.EAGER)
+//    private Set<Credit> directors = new HashSet<>();
 
     public Movie(MovieDTO movieDTO)
     {
@@ -66,13 +66,13 @@ public class Movie
         }
     }
 
-    public void addDirector(Credit credit)
-    {
-        if (credit != null)
-        {
-            directors.add(credit);
-            credit.addMovie(this);
-        }
-    }
+//    public void addDirector(Credit credit)
+//    {
+//        if (credit != null)
+//        {
+//            directors.add(credit);
+//            credit.addMovie(this);
+//        }
+//    }
 
 }
