@@ -42,7 +42,7 @@ public class HibernateConfig
     private static void getAnnotationConfiguration(Configuration configuration) {
         configuration.addAnnotatedClass(Movie.class);
         //configuration.addAnnotatedClass(Credit.class);
-        //configuration.addAnnotatedClass(Genre.class);
+        configuration.addAnnotatedClass(Genre.class);
     }
 
     private static EntityManagerFactory createEMF(boolean forTest) {

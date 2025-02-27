@@ -5,6 +5,7 @@ import dat.entities.Genre;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
 
 import java.util.List;
 
@@ -61,6 +62,19 @@ public class GenreDAO implements IDAO<Genre>
         {
             throw new ApiException(401, "Error reading genre from db", e);
         }
+    }
+
+    public List<Genre> readAll()
+    {
+        List<Genre> genres;
+        try (EntityManager em = emf.createEntityManager())
+        {
+            em.getTransaction().begin();
+            String jpql = "SELECT g FROM Genre g";
+            Query query = em.createQuery(jpql);
+            genres = query.getResultList();
+        }
+        return genres;
     }
 
 
