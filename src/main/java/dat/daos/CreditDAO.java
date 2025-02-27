@@ -36,9 +36,10 @@ public class CreditDAO implements IDAO<Credit>
             em.persist(object);
             em.getTransaction().commit();
             return object;
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
-            throw new ApiException(401, "Error creating movie");
+            throw new ApiException(401, "Error creating credit. ", e);
         }
     }
 
@@ -53,6 +54,10 @@ public class CreditDAO implements IDAO<Credit>
             }
             em.getTransaction().commit();
         }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error creating credits ", e);
+        }
         return objects;
     }
 
@@ -64,7 +69,7 @@ public class CreditDAO implements IDAO<Credit>
         }
         catch (Exception e)
         {
-            throw new ApiException(401, "Error reading genre from db", e);
+            throw new ApiException(401, "Error reading credit from db", e);
         }
     }
     public Credit read(Credit object)
@@ -75,7 +80,7 @@ public class CreditDAO implements IDAO<Credit>
         }
         catch (Exception e)
         {
-            throw new ApiException(401, "Error reading genre from db", e);
+            throw new ApiException(401, "Error reading credit from db", e);
         }
 
     }
@@ -89,6 +94,10 @@ public class CreditDAO implements IDAO<Credit>
             em.merge(object);
             em.getTransaction().commit();
         }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error updating credit from db", e);
+        }
         return object;
     }
 
@@ -99,6 +108,10 @@ public class CreditDAO implements IDAO<Credit>
             em.getTransaction().begin();
             em.remove(id);
             em.getTransaction().commit();
+        }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error deleting credit from db", e);
         }
     }
 }
