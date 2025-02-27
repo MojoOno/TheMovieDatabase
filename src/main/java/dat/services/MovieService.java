@@ -64,17 +64,41 @@ public class MovieService
         }
     }
 
-//    public List<MovieDTO> getMoviesFromCountryFromLastFiveYears(String country, int pageNumber) {
-//        String url = BASE_URL + "/discover/movie?include_adult=false&include_video=false&language=da-DK&page=%PAGE%&release_date.gte=%TODAY%&sort_by=popularity.desc&with_original_language=%COUNTRY%&api_key=" + API_KEY;
-//        try {
-//            String json = dataAPIReader.getDataFromClient(url.replace("%COUNTRY%", country).replace("%TODAY%", LocalDate.now().toString()).replace("%PAGE%", String.valueOf(pageNumber)));
-//            MovieResponseDTO response = objectMapper.readValue(json, MovieResponseDTO.class);
-//            return response.getMovies();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return List.of();
-//        }
-//    }
+    public List<CreditDTO> getCast(Long movieId) {
+        String url = BASE_URL + "/movie/" + movieId + "/credits?api_key=" + API_KEY;
+        try {
+            String json = dataAPIReader.getDataFromClient(url);
+            CreditResponseDTO response = objectMapper.readValue(json, CreditResponseDTO.class);
+            return response.getCast();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
+    public List<CreditDTO> getCastFromMoviesFromCountryFromLastFiveYears(String country)
+    {
+        List<MovieDTO> movies = getMoviesFromCountryFromLastFiveYears(country);
+        List <CreditDTO> castList = new ArrayList<>();
+        for (MovieDTO movie : movies)
+        {
+            Long movieId = movie.getMovieId();
+            List<CreditDTO> cast = getCast(movieId);
+            castList.addAll(cast);
+        }
+        return castList;
+    }
+
+    public List<CreditDTO> getCrew(Long movieId) {
+        String url = BASE_URL + "/movie/" + movieId +"/credits?language=da-DK&api_key=" + API_KEY;
+        try {
+            String json = dataAPIReader.getDataFromClient(url);
+            CreditResponseDTO response = objectMapper.readValue(json, CreditResponseDTO.class);
+            return response.getCrew().stream().filter(actor -> actor.getKnownForDepartment().equals("Directing")).collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
 
     public List<MovieDTO> getMoviesFromCountryFromLastFiveYears(String country) {
         List<MovieDTO> allMovies = new ArrayList<>();
@@ -110,31 +134,6 @@ public class MovieService
         }
 
         return allMovies;
-    }
-
-
-    public List<CreditDTO> getActors(int movieId) {
-        String url = BASE_URL + "/movie/" + movieId +"/credits?language=da-DK&api_key=" + API_KEY;
-        try {
-            String json = dataAPIReader.getDataFromClient(url);
-            CreditResponseDTO response = objectMapper.readValue(json, CreditResponseDTO.class);
-            return response.getCast();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return List.of();
-        }
-    }
-
-    public List<CreditDTO> getDirectors(int movieId) {
-        String url = BASE_URL + "/movie/" + movieId +"/credits?language=da-DK&api_key=" + API_KEY;
-        try {
-            String json = dataAPIReader.getDataFromClient(url);
-            CreditResponseDTO response = objectMapper.readValue(json, CreditResponseDTO.class);
-            return response.getCrew().stream().filter(actor -> actor.getKnownForDepartment().equals("Directing")).collect(Collectors.toList());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return List.of();
-        }
     }
 
     public MovieDTO getMovieById(int movieId)

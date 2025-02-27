@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CreditDTO
 {
-    private int id;
+    @JsonProperty("id")
+    private Long creditId;
     private String name;
 
     @JsonProperty("known_for_department")
