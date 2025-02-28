@@ -4,10 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dat.config.HibernateConfig;
 import dat.daos.SauronDAO;
-import dat.daos.SauronDAO;
 import dat.entities.Movie;
 import dat.exceptions.ApiException;
-import dat.utils.DataAPIReader;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
