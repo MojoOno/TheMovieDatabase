@@ -1,6 +1,5 @@
 package dat.daos;
 
-import dat.config.HibernateConfig;
 import dat.entities.Genre;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
@@ -34,9 +33,10 @@ public class GenreDAO implements IDAO<Genre>
             em.persist(object);
             em.getTransaction().commit();
             return object;
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
-            throw new ApiException(401, "Error creating movie");
+            throw new ApiException(401, "Error creating genre", e);
         }
     }
 
@@ -51,10 +51,14 @@ public class GenreDAO implements IDAO<Genre>
             }
             em.getTransaction().commit();
         }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error creating genres", e);
+        }
         return objects;
     }
 
-    public Genre read(int id)
+    public Genre read(Long id)
     {
         try (EntityManager em = emf.createEntityManager())
         {
@@ -72,10 +76,14 @@ public class GenreDAO implements IDAO<Genre>
         try (EntityManager em = emf.createEntityManager())
         {
             em.getTransaction().begin();
-            em.merge(object);
+            Genre updatedEntity = em.merge(object);
             em.getTransaction().commit();
+            return updatedEntity;
         }
-        return object;
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error updating genre", e);
+        }
     }
 
     public void delete(Long id)
@@ -85,6 +93,10 @@ public class GenreDAO implements IDAO<Genre>
             em.getTransaction().begin();
             em.remove(id);
             em.getTransaction().commit();
+        }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error deleting genre", e);
         }
     }
 }

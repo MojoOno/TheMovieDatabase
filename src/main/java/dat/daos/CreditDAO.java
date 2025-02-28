@@ -1,8 +1,6 @@
 package dat.daos;
 
-import dat.config.HibernateConfig;
 import dat.entities.Credit;
-import dat.entities.Genre;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -36,9 +34,10 @@ public class CreditDAO implements IDAO<Credit>
             em.persist(object);
             em.getTransaction().commit();
             return object;
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
-            throw new ApiException(401, "Error creating movie");
+            throw new ApiException(401, "Error creating credit. ", e);
         }
     }
 
@@ -53,10 +52,14 @@ public class CreditDAO implements IDAO<Credit>
             }
             em.getTransaction().commit();
         }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error creating credits ", e);
+        }
         return objects;
     }
 
-    public Credit read(int id)
+    public Credit read(Long id)
     {
         try (EntityManager em = emf.createEntityManager())
         {
@@ -64,7 +67,7 @@ public class CreditDAO implements IDAO<Credit>
         }
         catch (Exception e)
         {
-            throw new ApiException(401, "Error reading genre from db", e);
+            throw new ApiException(401, "Error reading credit from db", e);
         }
     }
     public Credit read(Credit object)
@@ -75,7 +78,7 @@ public class CreditDAO implements IDAO<Credit>
         }
         catch (Exception e)
         {
-            throw new ApiException(401, "Error reading genre from db", e);
+            throw new ApiException(401, "Error reading credit from db", e);
         }
 
     }
@@ -86,10 +89,14 @@ public class CreditDAO implements IDAO<Credit>
         try (EntityManager em = emf.createEntityManager())
         {
             em.getTransaction().begin();
-            em.merge(object);
+            Credit updatedEntity = em.merge(object);
             em.getTransaction().commit();
+            return updatedEntity;
         }
-        return object;
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error updating credit from db", e);
+        }
     }
 
     public void delete(Long id)
@@ -99,6 +106,10 @@ public class CreditDAO implements IDAO<Credit>
             em.getTransaction().begin();
             em.remove(id);
             em.getTransaction().commit();
+        }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error deleting credit from db", e);
         }
     }
 }

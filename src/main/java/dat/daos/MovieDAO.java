@@ -1,13 +1,11 @@
 package dat.daos;
 
-import dat.entities.Genre;
 import dat.entities.Movie;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
-
-import java.util.List;
+import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.List;
 
@@ -39,9 +37,12 @@ public class MovieDAO implements IDAO<Movie>
             em.persist(object);
             em.getTransaction().commit();
             return object;
+        } catch (ConstraintViolationException e)
+        {
+            throw new ApiException(403, "Error movie violates constraint, likely already exists.", e);
         } catch (Exception e)
         {
-            throw new ApiException(401, "Error creating movie");
+            throw new ApiException(401, "Error creating movie. ", e);
         }
     }
     public List<Movie> create(List<Movie> objects)
@@ -54,13 +55,23 @@ public class MovieDAO implements IDAO<Movie>
                 em.persist(object);
             }
             em.getTransaction().commit();
+        } catch (Exception e)
+        {
+            throw new ApiException(401, "Error creating movies. ", e);
         }
         return objects;
     }
     @Override
-    public Movie read(int id)
+    public Movie read(Long id)
     {
-        return null;
+        try (EntityManager em = emf.createEntityManager())
+        {
+            return em.find(Movie.class, id);
+        }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error reading movie from db", e);
+        }
     }
 
     @Override
@@ -69,10 +80,13 @@ public class MovieDAO implements IDAO<Movie>
         try (EntityManager em = emf.createEntityManager())
         {
             em.getTransaction().begin();
-            em.merge(object);
+            Movie updatedEntity = em.merge(object);
             em.getTransaction().commit();
+            return updatedEntity;
+        } catch (Exception e)
+        {
+            throw new ApiException(401, "Error updating movie. ", e);
         }
-        return object;
     }
     @Override
     public void delete(Long id)
@@ -82,6 +96,9 @@ public class MovieDAO implements IDAO<Movie>
             em.getTransaction().begin();
             em.remove(id);
             em.getTransaction().commit();
+        } catch (Exception e)
+        {
+            throw new ApiException(401, "Error deleting movie. ", e);
         }
     }
 
@@ -96,9 +113,9 @@ public class MovieDAO implements IDAO<Movie>
             movies = query.getResultList();
             em.getTransaction().commit();
 
-        } catch (Exception e)
+        }  catch (Exception e)
         {
-            e.printStackTrace();
+            throw new ApiException(401, "Error reading movie. ", e);
         }
         return movies;
     }
