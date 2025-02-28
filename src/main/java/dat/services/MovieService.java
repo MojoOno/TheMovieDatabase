@@ -3,7 +3,7 @@ package dat.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dat.config.HibernateConfig;
-import dat.daos.MovieDAO;
+import dat.daos.SauronDAO;
 import dat.dtos.*;
 import dat.entities.Movie;
 import dat.utils.DataAPIReader;
@@ -22,7 +22,7 @@ public class MovieService
     private static final String BASE_URL = "https://api.themoviedb.org/3";
     private static final String API_KEY = System.getenv("api_key");
     private final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-    private final  MovieDAO movieDAO = MovieDAO.getInstance(emf);
+    private final SauronDAO sauronDAO = SauronDAO.getInstance(emf);
 
     public MovieService(DataAPIReader dataAPIReader)
     {
@@ -37,7 +37,7 @@ public class MovieService
         List<Movie> movies = null;
         try
         {
-            movies =  movieDAO.findAll();
+            movies =  sauronDAO.findAll(Movie.class);
             int lastIndex = movies.size() -1;
 
             System.out.println("First movie: "+ movies.get(0));

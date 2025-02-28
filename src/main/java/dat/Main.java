@@ -1,9 +1,7 @@
 package dat;
 
 import dat.config.HibernateConfig;
-import dat.daos.CreditDAO;
-import dat.daos.GenreDAO;
-import dat.daos.MovieDAO;
+import dat.daos.SauronDAO;
 import dat.dtos.CreditDTO;
 import dat.dtos.GenreDTO;
 import dat.dtos.MovieDTO;
@@ -19,9 +17,7 @@ import java.util.List;
 public class Main
 {
     public final static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-    final static MovieDAO movieDAO = MovieDAO.getInstance(emf);
-    final static CreditDAO creditDAO = CreditDAO.getInstance(emf);
-    final static GenreDAO genreDAO = GenreDAO.getInstance(emf);
+    final static SauronDAO sauronDAO = SauronDAO.getInstance(emf);
 
     public static void main(String[] args)
     {
@@ -34,7 +30,7 @@ public class Main
                 .map(Genre::new)
                 .toList();
         genres.forEach(System.out::println);
-        genreDAO.create(genres);
+        sauronDAO.create(genres);
 
 
 
@@ -44,7 +40,7 @@ public class Main
         for (MovieDTO movieDTO : movieDTOs)
         {
             Movie movie = new Movie(movieDTO);
-            movieDAO.create(movie);
+            sauronDAO.create(movie);
 
             // Add genres to the movie
             //movieDTO.getGenreIds().forEach(id -> movie.addGenre(genreDAO.read(id)));
@@ -56,9 +52,9 @@ public class Main
             List<Credit> cast = castList.stream()
                     .map(Credit::new)
                     .toList();
-            creditDAO.update(cast);
+            sauronDAO.update(cast);
             cast.forEach(movie::addActor);
-            movieDAO.update(movie);
+            sauronDAO.update(movie);
 
             // Add directors to the movie
 //            List<CreditDTO> directorList = service.getCrew(movieDTO.getMovieId());
