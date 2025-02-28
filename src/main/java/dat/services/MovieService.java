@@ -38,7 +38,7 @@ public class MovieService
             sauronDAO.create(movie);
 
             // Add genres to the movie
-            movieDTO.getGenreIds().forEach(id -> movie.addGenre(sauronDAO.read(id)));
+            movieDTO.getGenreIds().forEach(id -> movie.addGenre(sauronDAO.read(Genre.class, id)));
             //sauronDAO.update(movie);
 
 
