@@ -47,7 +47,7 @@ public class Main
             movieDAO.create(movie);
 
             // Add genres to the movie
-            movieDTO.getGenreIds().forEach(id -> movie.addGenre(genreDAO.read(id)));
+            movieDTO.getGenreIds().forEach(id -> movie.addGenre(genreDAO.read(Long.valueOf(id))));
             //movieDAO.update(movie);
 
 
