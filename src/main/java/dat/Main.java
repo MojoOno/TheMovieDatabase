@@ -36,6 +36,7 @@ public class Main
 
         List<MovieDTO> movieDTOs = service.getMoviesFromCountryFromLastFiveYears("da");
 
+
 //        create a new movie object for each movie in the list
         for (MovieDTO movieDTO : movieDTOs)
         {
@@ -43,7 +44,7 @@ public class Main
             sauronDAO.create(movie);
 
             // Add genres to the movie
-            //movieDTO.getGenreIds().forEach(id -> movie.addGenre(genreDAO.read(id)));
+            movieDTO.getGenreIds().forEach(id -> movie.addGenre(sauronDAO.read(Genre.class, id)));
             //movieDAO.update(movie);
 
 
