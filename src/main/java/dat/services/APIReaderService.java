@@ -101,7 +101,7 @@ public class APIReaderService
                 }
 
                 // Set totalPages from the response (only needs to be done once)
-//                totalPages = response.getTotalPages();
+                totalPages = response.getTotalPages();
 
                 pageNumber++; // Move to the next page
             } while (pageNumber <= totalPages); // Continue until all pages are fetched
