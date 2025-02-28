@@ -10,7 +10,6 @@ import dat.dtos.MovieDTO;
 import dat.entities.Credit;
 import dat.entities.Genre;
 import dat.entities.Movie;
-import dat.services.APIReaderService;
 import dat.services.MovieService;
 import dat.utils.DataAPIReader;
 import jakarta.persistence.EntityManagerFactory;
