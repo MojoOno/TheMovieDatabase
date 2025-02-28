@@ -66,13 +66,16 @@ public class GenreDAO implements IDAO<Genre>
 
     public List<Genre> readAll()
     {
-        List<Genre> genres;
+        List<Genre> genres = null;
         try (EntityManager em = emf.createEntityManager())
         {
             em.getTransaction().begin();
             String jpql = "SELECT g FROM Genre g";
             Query query = em.createQuery(jpql);
             genres = query.getResultList();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
         }
         return genres;
     }

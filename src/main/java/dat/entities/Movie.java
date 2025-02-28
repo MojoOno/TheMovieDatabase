@@ -41,10 +41,6 @@ public class Movie
         this.popularity = movieDTO.getPopularity();
     }
 
-    public Movie(String title)
-    {
-        this.title = title;
-    }
 
     public void addGenre(Genre genre)
     {

@@ -41,7 +41,7 @@ public class MovieService
     {
         List<Movie> movies = null;
         try {
-            movies = movieDAO.findAll();
+            movies = movieDAO.readAll();
             List<Movie> filteredMovies = movies.stream()
                 .filter(movie -> movie.getGenres().stream()
                     .anyMatch(genre -> genre.getName().equalsIgnoreCase(genreName)))
