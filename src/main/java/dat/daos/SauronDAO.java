@@ -60,7 +60,7 @@ public class SauronDAO
         }
     }
 
-    public <T> T read(Class<T> type, int id)
+    public <T> T read(Class<T> type, Long id)
     {
         try (EntityManager em = emf.createEntityManager())
         {
