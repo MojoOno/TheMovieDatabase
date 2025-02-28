@@ -19,12 +19,13 @@ public class Credit
     private String name;
     private String knownForDepartment;
 
-    @ManyToMany (mappedBy = "credits", fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @ToString.Exclude
     private Set<Movie> movies = new HashSet<>();
 
     public Credit(CreditDTO creditDTO)
     {
+        this.id = creditDTO.getCreditId();
         this.name = creditDTO.getName();
         this.knownForDepartment = creditDTO.getKnownForDepartment();
     }
