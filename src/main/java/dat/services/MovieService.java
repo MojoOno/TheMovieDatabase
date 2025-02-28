@@ -25,11 +25,12 @@ public class MovieService {
     private final APIReaderService service = new APIReaderService(reader);
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-    // Thread-safe map to prevent duplicate insertions of Credit entities
+    // Thread-safe maps to prevent duplicate insertions
+    private static final ConcurrentHashMap<Long, Movie> movieCache = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Long, Credit> creditCache = new ConcurrentHashMap<>();
 
     /**
-     * Fetches and processes movies in parallel to improve performance.
+     * Fetches and processes movies in parallel.
      */
     public void createMovies() {
         // Load genres first (single-threaded)
@@ -37,10 +38,10 @@ public class MovieService {
         List<Genre> genres = genreDTOs.stream().map(Genre::new).toList();
         sauronDAO.create(genres);
 
-        // Fetch movies in parallel
+        // Fetch movies concurrently
         List<MovieDTO> movieDTOs = fetchMoviesConcurrently("da");
 
-        // Process movies in parallel
+        // Process movies concurrently
         List<Future<Void>> futures = movieDTOs.stream()
                 .map(movieDTO -> executor.submit(new MovieTask(movieDTO, sauronDAO, service)))
                 .toList();
@@ -54,17 +55,17 @@ public class MovieService {
             }
         }
 
-        // Shutdown the executor after processing all movies
+        // Shutdown the executor
         executor.shutdown();
     }
 
     /**
-     * Fetches movies concurrently using multiple threads.
+     * Fetches movies concurrently.
      * @param countryCode Country code for filtering movies.
      * @return A list of MovieDTOs.
      */
     private List<MovieDTO> fetchMoviesConcurrently(String countryCode) {
-        int threadCount = Runtime.getRuntime().availableProcessors(); // Optimal thread count
+        int threadCount = Runtime.getRuntime().availableProcessors();
         ExecutorService fetchExecutor = Executors.newFixedThreadPool(threadCount);
 
         List<Callable<List<MovieDTO>>> fetchTasks = new ArrayList<>();
@@ -75,9 +76,8 @@ public class MovieService {
         List<MovieDTO> allMovies = new ArrayList<>();
         try {
             List<Future<List<MovieDTO>>> results = fetchExecutor.invokeAll(fetchTasks);
-
             for (Future<List<MovieDTO>> result : results) {
-                allMovies.addAll(result.get()); // Merge results from all threads
+                allMovies.addAll(result.get());
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -89,7 +89,7 @@ public class MovieService {
     }
 
     /**
-     * Inner class responsible for processing a single movie concurrently.
+     * Task for processing a single movie.
      */
     static class MovieTask implements Callable<Void> {
         private final MovieDTO movieDTO;
@@ -105,19 +105,27 @@ public class MovieService {
         @Override
         public Void call() {
             try {
-                // Create movie entity
-                Movie movie = new Movie(movieDTO);
-                sauronDAO.create(movie);
+                Long movieId = movieDTO.getMovieId();
+
+                // Prevent duplicate movie insertion
+                Movie movie = movieCache.computeIfAbsent(movieId, id -> {
+                    if (sauronDAO.read(Movie.class, id) == null) {
+                        Movie newMovie = new Movie(movieDTO);
+                        sauronDAO.create(newMovie);
+                        return newMovie;
+                    }
+                    return sauronDAO.read(Movie.class, id);
+                });
 
                 // Add genres
                 movieDTO.getGenreIds().forEach(id -> movie.addGenre(sauronDAO.read(Genre.class, id.longValue())));
 
                 // Fetch and add cast
-                List<CreditDTO> castList = service.getCast(movieDTO.getMovieId());
+                List<CreditDTO> castList = service.getCast(movieId);
                 for (CreditDTO creditDTO : castList) {
                     Long creditId = creditDTO.getCreditId();
 
-                    // Check if credit already exists in DB or cache
+                    // Prevent duplicate credit insertions
                     Credit credit = creditCache.computeIfAbsent(creditId, id -> {
                         Credit newCredit = new Credit(creditDTO);
                         if (sauronDAO.read(Credit.class, id) == null) {
@@ -129,7 +137,7 @@ public class MovieService {
                     movie.addActor(credit);
                 }
 
-                // Update movie with genres and actors
+                // Update movie with actors & genres
                 sauronDAO.update(movie);
 
             } catch (Exception e) {
@@ -139,6 +147,7 @@ public class MovieService {
         }
     }
 }
+
 // Add directors to the movie
 //            List<CreditDTO> directorList = service.getCrew(movieDTO.getMovieId());
 //            List<Credit> directors = directorList.stream()
