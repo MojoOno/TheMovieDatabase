@@ -19,7 +19,7 @@ public class CreditDTO
     @JsonProperty("department")
     private String department;
     @JsonProperty("job")
-    private String job;
+    private String job = "Actor";
 
 
 }
