@@ -19,9 +19,20 @@ public class Credit
     private String name;
     private String knownForDepartment;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @ToString.Exclude
-    private Set<Movie> movies = new HashSet<>();
+    @ManyToMany(mappedBy = "actors", fetch = FetchType.EAGER)
+        @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Movie> actorMovies = new HashSet<>();
+
+    @ManyToMany(mappedBy = "directors", fetch = FetchType.EAGER)
+       @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Movie> directorMovies = new HashSet<>();
+
+//    @ManyToOne
+//    @ToString.Exclude
+//    @EqualsAndHashCode.Exclude
+//    private Movie movie;
 
     public Credit(CreditDTO creditDTO)
     {
@@ -30,11 +41,19 @@ public class Credit
         this.knownForDepartment = creditDTO.getKnownForDepartment();
     }
 
-    public void addMovie(Movie movie)
+    public void addActorMovie(Movie movie)
     {
         if (movie != null)
         {
-            movies.add(movie);
+            actorMovies.add(movie);
+        }
+    }
+
+    public void addDirectorMovie(Movie movie)
+    {
+        if (movie != null)
+        {
+            directorMovies.add(movie);
         }
     }
 }
