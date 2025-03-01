@@ -3,6 +3,7 @@ package dat.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dat.dtos.*;
+import dat.exceptions.ApiException;
 import dat.utils.DataAPIReader;
 
 import java.time.LocalDate;
@@ -41,6 +42,23 @@ public class APIReaderService
         }
     }
 
+    public List<CreditDTO> getCastAndDirectors(Long movieId)
+    {
+        List<CreditDTO> allCredits = new ArrayList<>();
+        String url = BASE_URL + "/movie/" + movieId + "/credits?api_key=" + API_KEY;
+        try
+        {
+            String json = dataAPIReader.getDataFromClient(url);
+            CreditResponseDTO response = objectMapper.readValue(json, CreditResponseDTO.class);
+            allCredits.addAll(response.getCast());
+            allCredits.addAll(response.getCrew().stream().filter(actor -> "Director".equals(actor.getJob()) || "Directing".equals(actor.getDepartment())).toList());
+        } catch (Exception e)
+        {
+            throw new ApiException(401, "Error fetching data from API", e);
+        }
+        return allCredits;
+    }
+
     public List<CreditDTO> getCast(Long movieId) {
         String url = BASE_URL + "/movie/" + movieId + "/credits?api_key=" + API_KEY;
         try {
@@ -51,18 +69,6 @@ public class APIReaderService
             e.printStackTrace();
             return List.of();
         }
-    }
-    public List<CreditDTO> getCastFromMoviesFromCountryFromLastFiveYears(String country)
-    {
-        List<MovieDTO> movies = getMoviesFromCountryFromLastFiveYears(country);
-        List <CreditDTO> castList = new ArrayList<>();
-        for (MovieDTO movie : movies)
-        {
-            Long movieId = movie.getMovieId();
-            List<CreditDTO> cast = getCast(movieId);
-            castList.addAll(cast);
-        }
-        return castList;
     }
 
     public List<CreditDTO> getCrew(Long movieId) {
@@ -77,37 +83,86 @@ public class APIReaderService
         }
     }
 
-    public List<MovieDTO> getMoviesFromCountryFromLastFiveYears(String country) {
+//    public List<MovieDTO> getMoviesFromCountryFromLastFiveYears(String country) {
+//        List<MovieDTO> allMovies = new ArrayList<>();
+//        int pageNumber = 1;
+//        int totalPages = 1; // Initial assumption; will be updated after the first request.
+//
+//        String urlTemplate = BASE_URL + "/discover/movie?include_adult=false&include_video=false&language=da-DK&page=%PAGE%&release_date.gte=%DATE%&sort_by=popularity.desc&with_original_language=%COUNTRY%&api_key=" + API_KEY;
+//
+//        try {
+//            do {
+//                // Replace placeholders
+//                String url = urlTemplate
+//                        .replace("%COUNTRY%", country)
+//                        .replace("%DATE%", LocalDate.now().minusYears(5).toString()) // Adjust to last 5 years
+//                        .replace("%PAGE%", String.valueOf(pageNumber));
+//
+//                // Fetch data
+//                String json = dataAPIReader.getDataFromClient(url);
+//                MovieResponseDTO response = objectMapper.readValue(json, MovieResponseDTO.class);
+//
+//                if (response.getMovies() != null) {
+//                    allMovies.addAll(response.getMovies());
+//                }
+//
+//                // Set totalPages from the response (only needs to be done once)
+////                totalPages = response.getTotalPages();
+//
+//                pageNumber++; // Move to the next page
+//            } while (pageNumber <= totalPages); // Continue until all pages are fetched
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return allMovies;
+//    }
+
+    public List<MovieDTO> getMoviesFromCountryFromLastFiveYears(String country)
+    {
         List<MovieDTO> allMovies = new ArrayList<>();
         int pageNumber = 1;
-        int totalPages = 1; // Initial assumption; will be updated after the first request.
+        try
+        {
+            while (true)
+            {
+                List<MovieDTO> movies = getMoviesFromCountryFromLastFiveYears(country, pageNumber);
+                if (movies.isEmpty()) break;
+                allMovies.addAll(movies);
+                pageNumber++;
+            }
+        }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error fetching data from API", e);
+        }
+        return allMovies;
+    }
 
-        String urlTemplate = BASE_URL + "/discover/movie?include_adult=false&include_video=false&language=da-DK&page=%PAGE%&release_date.gte=%DATE%&sort_by=popularity.desc&with_original_language=%COUNTRY%&api_key=" + API_KEY;
+    public List<MovieDTO> getMoviesFromCountryFromLastFiveYears(String country, int pageNumber)
+    {
+        List<MovieDTO> allMovies = new ArrayList<>();
+        if (pageNumber < 1) return allMovies;
+        String urlTemplate = BASE_URL + "/discover/movie?include_adult=true&include_video=false&language=da-DK&"
+                                        + "page=%PAGE%&release_date.gte=%DATE%&sort_by=popularity.desc&"
+                                        + "with_original_language=%COUNTRY%&api_key=" + API_KEY;
+        String url = urlTemplate
+                .replace("%COUNTRY%", country)
+                .replace("%DATE%", LocalDate.now().minusYears(5).toString()) // Adjust to last 5 years
+                .replace("%PAGE%", String.valueOf(pageNumber));
+        try
+        {
+            // Fetch data
+            String json = dataAPIReader.getDataFromClient(url);
+            MovieResponseDTO response = objectMapper.readValue(json, MovieResponseDTO.class);
 
-        try {
-            do {
-                // Replace placeholders
-                String url = urlTemplate
-                        .replace("%COUNTRY%", country)
-                        .replace("%DATE%", LocalDate.now().minusYears(5).toString()) // Adjust to last 5 years
-                        .replace("%PAGE%", String.valueOf(pageNumber));
-
-                // Fetch data
-                String json = dataAPIReader.getDataFromClient(url);
-                MovieResponseDTO response = objectMapper.readValue(json, MovieResponseDTO.class);
-
-                if (response.getMovies() != null) {
-                    allMovies.addAll(response.getMovies());
-                }
-
-                // Set totalPages from the response (only needs to be done once)
-//                totalPages = response.getTotalPages();
-
-                pageNumber++; // Move to the next page
-            } while (pageNumber <= totalPages); // Continue until all pages are fetched
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            if (response.getMovies() != null) {
+                allMovies.addAll(response.getMovies());
+            }
+        }
+        catch (Exception e) {
+            throw new ApiException(401, "Error fetching data from API", e);
         }
 
         return allMovies;
