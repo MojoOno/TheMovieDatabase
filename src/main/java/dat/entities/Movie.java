@@ -32,12 +32,18 @@ public class Movie
     private Set<Genre> genres = new HashSet<>();
 
     @EqualsAndHashCode.Exclude
-    @ManyToMany (fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "movie_actor",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id"))
     private Set<Credit> actors = new HashSet<>();
 
-//    @EqualsAndHashCode.Exclude
-//    @ManyToMany (fetch = FetchType.EAGER)
-//    private Set<Credit> directors = new HashSet<>();
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "movie_director",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "director_id"))
+    private Set<Credit> directors = new HashSet<>();
 
     public Movie(MovieDTO movieDTO)
     {
@@ -62,17 +68,17 @@ public class Movie
         if (credit != null)
         {
             actors.add(credit);
-            credit.addMovie(this);
+            credit.addActorMovie(this);
         }
     }
 
-//    public void addDirector(Credit credit)
-//    {
-//        if (credit != null)
-//        {
-//            directors.add(credit);
-//            credit.addMovie(this);
-//        }
-//    }
+    public void addDirector(Credit credit)
+    {
+        if (credit != null)
+        {
+            directors.add(credit);
+            credit.addDirectorMovie(this);
+        }
+    }
 
 }
