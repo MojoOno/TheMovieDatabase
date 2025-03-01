@@ -51,7 +51,7 @@ public class APIReaderService
             String json = dataAPIReader.getDataFromClient(url);
             CreditResponseDTO response = objectMapper.readValue(json, CreditResponseDTO.class);
             allCredits.addAll(response.getCast());
-            allCredits.addAll(response.getCrew().stream().filter(actor -> "Director".equals(actor.getJob()) || "Directing".equals(actor.getDepartment())).toList());
+            allCredits.addAll(response.getCrew().stream().filter(crew -> "Director".equals(crew.getJob()) || "Directing".equals(crew.getDepartment())).toList());
         } catch (Exception e)
         {
             throw new ApiException(401, "Error fetching data from API", e);
