@@ -16,6 +16,10 @@ public class CreditDTO
 
     @JsonProperty("known_for_department")
     private String knownForDepartment;
+    @JsonProperty("department")
+    private String department;
+    @JsonProperty("job")
+    private String job;
 
 
 }
