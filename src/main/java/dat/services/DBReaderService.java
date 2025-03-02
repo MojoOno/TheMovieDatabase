@@ -1,31 +1,23 @@
 package dat.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dat.config.HibernateConfig;
 import dat.daos.SauronDAO;
 import dat.entities.Movie;
 import dat.exceptions.ApiException;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
 public class DBReaderService
 {
-    private ObjectMapper objectMapper;
     private final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
     private final SauronDAO sauronDAO = SauronDAO.getInstance(emf);
 
-    public DBReaderService()
-    {
-        this.objectMapper = new ObjectMapper();
-        this.objectMapper.registerModule(new JavaTimeModule()); // Supports LocalDate
-    }
+
 
     public List<Movie> getMovies()
     {
-        List<Movie> movies = null;
+        List<Movie> movies;
         try
         {
             movies =  sauronDAO.findAll(Movie.class);
@@ -35,7 +27,7 @@ public class DBReaderService
             System.out.println("Last movie: "+  movies.get(lastIndex));
         } catch (Exception e)
         {
-            e.printStackTrace();
+            throw new ApiException(401, "Error fetching data from db", e);
         }
         return movies;
     }
@@ -43,7 +35,7 @@ public class DBReaderService
 
     public Double getTotalAverageRating()
     {
-        Double totalAverageRating = null;
+        Double totalAverageRating;
         try
         {
             totalAverageRating = sauronDAO.getTotalAverageRating();
