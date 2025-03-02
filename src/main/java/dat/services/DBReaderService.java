@@ -39,72 +39,91 @@ public class DBReaderService
         }
         return movies;
     }
+
+
     public Double getTotalAverageRating()
     {
-        try (EntityManager em = emf.createEntityManager())
+        Double totalAverageRating = null;
+        try
         {
-            return em.createQuery("SELECT AVG(m.rating) FROM Movie m", Double.class)
-                    .getSingleResult();
+            totalAverageRating = sauronDAO.getTotalAverageRating();
+        } catch (Exception e)
+        {
+            throw new ApiException(401, "Error calculating average rating from db", e);
         }
-        catch (Exception e)
+        return totalAverageRating;
+    }
+
+
+    public void printBot10Movies()
+    {
+        try
         {
-            throw new ApiException(401, "Error reading object from db", e);
+            List<Movie> movies  = sauronDAO.getBot10Movies();
+            int counter = 1;
+            for (Movie movie : movies)
+            {
+                System.out.println(counter + ". " + movie.getTitle() + " - " + movie.getRating());
+                counter++;
+            }
+
+        } catch (Exception e)
+        {
+            throw new ApiException(401, "Error fetching data from db", e);
         }
     }
 
-    public List<Movie> getTop10Movies()
+    public void printTop10Movies()
     {
-        try (EntityManager em = emf.createEntityManager())
+        try
         {
-            return em.createQuery("SELECT m FROM Movie m ORDER BY m.rating DESC", Movie.class)
-                    .setMaxResults(10)
-                    .getResultList();
-        }
-        catch (Exception e)
+            List<Movie> movies  = sauronDAO.getTop10Movies();
+            int counter = 1;
+            for (Movie movie : movies)
+            {
+                System.out.println(counter + ". " + movie.getTitle() + " - " + movie.getRating());
+                counter++;
+            }
+
+        } catch (Exception e)
         {
-            throw new ApiException(401, "Error reading object from db", e);
+            throw new ApiException(401, "Error fetching data from db", e);
         }
     }
 
-    public List<Movie> getBot10Movies()
+    public void printPopularMovies()
     {
-        try (EntityManager em = emf.createEntityManager())
+        try
         {
-            return em.createQuery("SELECT m FROM Movie m ORDER BY m.rating ASC", Movie.class)
-                    .setMaxResults(10)
-                    .getResultList();
-        }
-        catch (Exception e)
+            List<Movie> movies  = sauronDAO.getPopularMovies();
+            int counter = 1;
+            for (Movie movie : movies)
+            {
+                System.out.println(counter + ". " + movie.getTitle() + " - " + movie.getRating());
+                counter++;
+            }
+
+        } catch (Exception e)
         {
-            throw new ApiException(401, "Error reading object from db", e);
+            throw new ApiException(401, "Error fetching data from db", e);
         }
     }
 
-    public List<Movie> getPopularMovies()
+    public void printMoviesByTitle(String title)
     {
-        try (EntityManager em = emf.createEntityManager())
+        try
         {
-            return em.createQuery("SELECT m FROM Movie m ORDER BY m.popularity DESC", Movie.class)
-                    .setMaxResults(10)
-                    .getResultList();
-        }
-        catch (Exception e)
-        {
-            throw new ApiException(401, "Error reading object from db", e);
-        }
-    }
-    public List<Movie> getMoviesByTitle(String title)
-    {
-        try (EntityManager em = emf.createEntityManager())
-        {
-            return em.createQuery("SELECT m FROM Movie m WHERE m.title LIKE :title", Movie.class)
-                    .setParameter("title", "%" + title + "%")
-                    .getResultList();
-        }
-        catch (Exception e)
-        {
-            throw new ApiException(401, "Error reading object from db", e);
-        }
-    }
+            List<Movie> movies  = sauronDAO.getMoviesByTitle(title);
+            int counter = 1;
+            for (Movie movie : movies)
+            {
+                System.out.println(counter + ". " + movie.getTitle() + " - " + movie.getRating());
+                counter++;
+            }
 
+        } catch (Exception e)
+        {
+            throw new ApiException(401, "Error fetching data from db", e);
+        }
+    }
 }
