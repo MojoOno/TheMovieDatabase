@@ -47,14 +47,14 @@ public class MovieService
                     .filter(creditDTO -> "Actor".equals(creditDTO.getJob()))
                     .map(Credit::new)
                     .toList();
-            sauronDAO.update(cast);
-            cast.forEach(movie::addActor);
+            List<Credit> persistedCast = sauronDAO.update(cast);
+            persistedCast.forEach(movie::addActor);
             List<Credit> directors = castList.stream()
                     .filter(creditDTO -> "Director".equals(creditDTO.getJob()))
                     .map(Credit::new)
                     .toList();
-            sauronDAO.update(directors);
-            directors.forEach(movie::addDirector);
+            List<Credit> persistedDirectors = sauronDAO.update(directors);
+            persistedDirectors.forEach(movie::addDirector);
 
             // Finally update the movie
             sauronDAO.update(movie);
