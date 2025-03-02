@@ -91,7 +91,7 @@ public class DBReaderService
             int counter = 1;
             for (Movie movie : movies)
             {
-                System.out.println(counter + ". " + movie.getTitle() + " - " + movie.getRating());
+                System.out.println(counter + ". " + movie.getTitle() + " - " + movie.getPopularity());
                 counter++;
             }
 
@@ -109,7 +109,7 @@ public class DBReaderService
             int counter = 1;
             for (Movie movie : movies)
             {
-                System.out.println(counter + ". " + movie.getTitle() + " - " + movie.getRating());
+                System.out.println(counter + ". " + movie.getTitle() + " - " + movie.getDirectors());
                 counter++;
             }
 
