@@ -147,6 +147,74 @@ public class SauronDAO
         }
     }
 
+    public Double getTotalAverageRating()
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
+            return em.createQuery("SELECT AVG(m.rating) FROM Movie m", Double.class)
+                    .getSingleResult();
+        }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error reading object from db", e);
+        }
+    }
+
+    public List<Movie> getTop10Movies()
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
+            return em.createQuery("SELECT m FROM Movie m ORDER BY m.rating DESC", Movie.class)
+                    .setMaxResults(10)
+                    .getResultList();
+        }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error reading object from db", e);
+        }
+    }
+
+    public List<Movie> getBot10Movies()
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
+            return em.createQuery("SELECT m FROM Movie m ORDER BY m.rating ASC", Movie.class)
+                    .setMaxResults(10)
+                    .getResultList();
+        }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error reading object from db", e);
+        }
+    }
+
+    public List<Movie> getPopularMovies()
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
+            return em.createQuery("SELECT m FROM Movie m ORDER BY m.popularity DESC", Movie.class)
+                    .setMaxResults(10)
+                    .getResultList();
+        }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error reading object from db", e);
+        }
+    }
+    public List<Movie> getMoviesByTitle(String title)
+    {
+        try (EntityManager em = emf.createEntityManager())
+        {
+            return em.createQuery("SELECT m FROM Movie m WHERE LOWER(m.title) LIKE LOWER(:title)", Movie.class)
+                    .setParameter("title", "%" + title + "%")
+                    .getResultList();
+        }
+        catch (Exception e)
+        {
+            throw new ApiException(401, "Error reading object from db", e);
+        }
+    }
+
 
 
 }
