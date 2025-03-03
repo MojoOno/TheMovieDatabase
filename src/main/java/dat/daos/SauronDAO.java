@@ -8,7 +8,7 @@ import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SauronDAO
+public class SauronDAO implements crudDAO, readerDAO
 {
     private static EntityManagerFactory emf;
     private static SauronDAO instance;
