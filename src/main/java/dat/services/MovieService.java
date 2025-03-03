@@ -20,7 +20,7 @@ public class MovieService
     DataAPIReader reader = new DataAPIReader();
     APIReaderService service = new APIReaderService(reader);
 
-    public void createMovies()
+    public void fetchAndPersistMovies(String country)
     {
         List<GenreDTO> genreDTOs = service.getGenres();
         List<Genre> genres = genreDTOs.stream()
@@ -29,7 +29,7 @@ public class MovieService
         sauronDAO.create(genres);
 
 
-        List<MovieDTO> movieDTOs = service.getMoviesFromCountryFromLastFiveYears("da",1);
+        List<MovieDTO> movieDTOs = service.getMoviesFromCountryFromLastFiveYears(country);
 
 //        create a new movie object for each movie in the list
         for (MovieDTO movieDTO : movieDTOs)

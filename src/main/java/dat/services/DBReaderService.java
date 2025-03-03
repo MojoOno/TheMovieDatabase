@@ -103,15 +103,20 @@ public class DBReaderService
 
     public void printMoviesByTitle(String title)
     {
+        List<Movie> movies = getMoviesByTitle(title);
+        int counter = 1;
+        for (Movie movie : movies)
+        {
+            System.out.println(counter + ". " + movie.getTitle() + " - " + movie.getDirectors());
+            counter++;
+        }
+    }
+
+    public List<Movie> getMoviesByTitle(String title)
+    {
         try
         {
-            List<Movie> movies  = sauronDAO.getMoviesByTitle(title);
-            int counter = 1;
-            for (Movie movie : movies)
-            {
-                System.out.println(counter + ". " + movie.getTitle() + " - " + movie.getDirectors());
-                counter++;
-            }
+            return sauronDAO.getMoviesByTitle(title);
 
         } catch (Exception e)
         {
